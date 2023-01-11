@@ -32,149 +32,22 @@ const br = document.querySelectorAll('[data-cellbr]');
 const section = document.querySelectorAll('[cell]');
 const board = document.getElementById('board');
 const winningMessageElement = document.getElementById('winningMessage');
-const restartButton = document.getElementById('restartButton');
-const winningMessageTextElement = document.querySelector('[data-winning-message-text]');
-var player;
-var circleTurn;
-var turn;
-window.onload = function () {
-  if (roomName != '') {
-    player = document.getElementById('player');
-  } else {
-    location.href = '/';
-  }
-  socket.emit('join', roomName);
+const winningMessageTextElement = document.querySelector(
+  '[data-winning-message-text]'
+);
+let circleTurn = false;
+setBoardHoverClass();
+function restart() {
   section.forEach((sec) => {
+    sec.className = 'first';
     var a = document.querySelectorAll('[data-cell' + sec.id.toString() + ']');
-    a.forEach((cell) => {
-      cell.classList.add('wait');
+    a.forEach((b) => {
+      b.className = 'cell';
     });
   });
-};
-socket.on('board', (player) => {
-  if (player === 'x') {
-    circleTurn = false;
-    turn = 'x';
-  } else {
-    circleTurn = true;
-    turn = 'o';
-  }
-  setBoardHoverClass();
-});
-socket.on('start', (x) => {
-  if (turn === 'x') {
-    player.innerText = ` Your Turn `;
-    section.forEach((sec) => {
-      var a = document.querySelectorAll('[data-cell' + sec.id.toString() + ']');
-      a.forEach((cell) => {
-        cell.className = 'cell';
-      });
-    });
-  } else {
-    player.innerText = ` X's Turn `;
-  }
-});
-socket.on('sec', (sec, cla) => {
-  var data = document.querySelectorAll('[data-cell' + sec + ']');
-  if (cla === 't') {
-    document.getElementById(sec).className = 'first ' + cla;
-  } else {
-    data.forEach((c) => {
-      c.className = 'cell';
-    });
-    document.getElementById(sec).className = 'first ' + cla;
-  }
-  if (checkwin(cla)) {
-    section.forEach((cell) => {
-      cell.classList.add('wait');
-    });
-    winningMessageTextElement.innerText = `${cla.toUpperCase()}'s Wins!`;
-    winningMessageElement.classList.add('show');
-  } else if (isDraw()) {
-    section.forEach((cell) => {
-      cell.classList.add('wait');
-    });
-    winningMessageTextElement.innerText = 'Draw!';
-    winningMessageElement.classList.add('show');
-  }
-});
-socket.on('moved', (pos, cla, who) => {
-  if (who === 'o') {
-    var a = 'x';
-  } else {
-    var a = 'o';
-  }
-  if (turn === 'o' && who === 'o') {
-    section.forEach((sec) => {
-      var a = document.querySelectorAll('[data-cell' + sec.id.toString() + ']');
-      a.forEach((cell) => {
-        if (cell.className.includes('x') || cell.className.includes('o'))
-          return;
-        cell.className = 'cell';
-      });
-    });
-    player.innerText = ` Your Turn `;
-  } else if (turn === 'x' && who === 'x') {
-    section.forEach((sec) => {
-      var a = document.querySelectorAll('[data-cell' + sec.id.toString() + ']');
-      a.forEach((cell) => {
-        if (cell.className.includes('x') || cell.className.includes('o'))
-          return;
-        cell.className = 'cell';
-      });
-    });
-    player.innerText = ` Your Turn `;
-  } else {
-    section.forEach((sec) => {
-      var a = document.querySelectorAll('[data-cell' + sec.id.toString() + ']');
-      a.forEach((cell) => {
-        if (cell.className.includes('x') || cell.className.includes('o'))
-          return;
-        cell.className = 'cell wait';
-      });
-    });
-    player.innerText = ` ${who.toUpperCase()}'s Turn `;
-  }
-  var sec = pos.charAt(0);
-  sec += pos.charAt(1);
-  if (document.getElementById(sec).className != 'first') return;
-  document.getElementById(pos).className = 'cell ' + cla;
-});
-
-socket.on('request', (a) => {
-  var b = confirm('Opponet wants to rematch');
-  socket.emit('response', roomName, b);
-  if (b === false) {
-    location.href = '/';
-  }
-});
-socket.on('rematch', (res) => {
-  if (res === false) {
-    alert('Opponent Denied, Sending to home page in 5 seconds');
-    setTimeout(() => {
-      location.href = '/';
-    }, 5000);
-  } else {
-    if (turn === 'x') {
-      circleTurn = true;
-      turn = 'o';
-    } else {
-      circleTurn = false;
-      turn = 'x';
-    }
-    section.forEach((sec) => {
-      sec.className = 'first';
-      var a = document.querySelectorAll('[data-cell' + sec.id.toString() + ']');
-      a.forEach((b) => {
-        b.className = 'cell';
-      });
-    });
-    winningMessageElement.classList.remove('show');
-    setBoardHoverClass();
-  }
-});
-function rematch() {
-  socket.emit('rematch', roomName);
+  circleTurn = false;
+  setBoardHoverClass()
+  winningMessageElement.classList.remove('show')
 }
 function action(s, c) {
   var id = document.getElementById(s + c);
@@ -182,17 +55,25 @@ function action(s, c) {
   var currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS;
   if (id.className != 'cell') return;
   if (sec.className != 'first') return;
-  socket.emit('move', roomName, s + c, turn);
-  id.className = 'cell ' + currentClass;
+  id.classList.add(currentClass);
   checksec(currentClass);
   checktie();
-  section.forEach((sec) => {
-    var a = document.querySelectorAll('[data-cell' + sec.id.toString() + ']');
-    a.forEach((cell) => {
-      if (cell.className.includes('x') || cell.className.includes('o')) return;
+  if (checkwin(currentClass)) {
+    section.forEach((cell) => {
       cell.classList.add('wait');
     });
-  });
+    winningMessageTextElement.innerText = `${currentClass.toUpperCase()}'s Wins!`;
+    winningMessageElement.classList.add('show');
+  } else if (isDraw()) {
+    section.forEach((cell) => {
+      cell.classList.add('wait');
+    });
+    winningMessageTextElement.innerText = 'Draw!';
+    winningMessageElement.classList.add('show');
+  } else {
+    circleTurn = !circleTurn;
+    setBoardHoverClass();
+  }
 }
 function setBoardHoverClass() {
   board.classList.remove(X_CLASS);
@@ -228,23 +109,125 @@ function checktie() {
         cell.className.includes(CIRCLE_CLASS)
       );
     });
-    if (b) socket.emit('section', roomName, sec.id, 't');
+    if (b) document.getElementById(sec.id).classList.add('t');
   });
 }
 function checksec(currentClass) {
-  section.forEach((sec) => {
-    if (sec.className === 'first') {
-      WINNING_COMBINATIONS.some((combination) => {
-        var data = document.querySelectorAll(
-          '[data-cell' + sec.id.toString() + ']'
-        );
-        var a = combination.every((index) => {
-          return data[index].classList.contains(currentClass);
-        });
-        if (a === true) {
-          socket.emit('section', roomName, sec.id, currentClass);
-        }
+  if (divtl.className === 'first') {
+    WINNING_COMBINATIONS.some((combination) => {
+      var a = combination.every((index) => {
+        return tl[index].classList.contains(currentClass);
       });
-    }
-  });
+      if (a === true) {
+        tl.forEach((c) => {
+          c.className = 'cell';
+        });
+        divtl.classList.add(currentClass);
+      }
+    });
+  }
+  if (divtm.className === 'first') {
+    WINNING_COMBINATIONS.some((combination) => {
+      var a = combination.every((index) => {
+        return tm[index].classList.contains(currentClass);
+      });
+      if (a === true) {
+        tm.forEach((c) => {
+          c.className = 'cell';
+        });
+        divtm.classList.add(currentClass);
+      }
+    });
+  }
+  if (divtr.className === 'first') {
+    WINNING_COMBINATIONS.some((combination) => {
+      var a = combination.every((index) => {
+        return tr[index].classList.contains(currentClass);
+      });
+      if (a === true) {
+        tr.forEach((c) => {
+          c.className = 'cell';
+        });
+        divtr.classList.add(currentClass);
+      }
+    });
+  }
+  if (divml.className === 'first') {
+    WINNING_COMBINATIONS.some((combination) => {
+      var a = combination.every((index) => {
+        return ml[index].classList.contains(currentClass);
+      });
+      if (a === true) {
+        ml.forEach((c) => {
+          c.className = 'cell';
+        });
+        divml.classList.add(currentClass);
+      }
+    });
+  }
+  if (divmm.className === 'first') {
+    WINNING_COMBINATIONS.some((combination) => {
+      var a = combination.every((index) => {
+        return mm[index].classList.contains(currentClass);
+      });
+      if (a === true) {
+        mm.forEach((c) => {
+          c.className = 'cell';
+        });
+        divmm.classList.add(currentClass);
+      }
+    });
+  }
+  if (divmr.className === 'first') {
+    WINNING_COMBINATIONS.some((combination) => {
+      var a = combination.every((index) => {
+        return mr[index].classList.contains(currentClass);
+      });
+      if (a === true) {
+        mr.forEach((c) => {
+          c.className = 'cell';
+        });
+        divmr.classList.add(currentClass);
+      }
+    });
+  }
+  if (divbl.className === 'first') {
+    WINNING_COMBINATIONS.some((combination) => {
+      var a = combination.every((index) => {
+        return bl[index].classList.contains(currentClass);
+      });
+      if (a === true) {
+        bl.forEach((c) => {
+          c.className = 'cell';
+        });
+        divbl.classList.add(currentClass);
+      }
+    });
+  }
+  if (divbm.className === 'first') {
+    WINNING_COMBINATIONS.some((combination) => {
+      var a = combination.every((index) => {
+        return bm[index].classList.contains(currentClass);
+      });
+      if (a === true) {
+        bm.forEach((c) => {
+          c.className = 'cell';
+        });
+        divbm.classList.add(currentClass);
+      }
+    });
+  }
+  if (divbr.className === 'first') {
+    WINNING_COMBINATIONS.some((combination) => {
+      var a = combination.every((index) => {
+        return br[index].classList.contains(currentClass);
+      });
+      if (a === true) {
+        br.forEach((c) => {
+          c.className = 'cell';
+        });
+        divbr.classList.add(currentClass);
+      }
+    });
+  }
 }

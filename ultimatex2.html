@@ -1,38 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="ultimatex2.css">
-    <%if(local === true) {%>
-        <script src="ultimatex2_local.js" defer></script>
-    <%} else {%>
-        <script src="ultimatex2.js" defer></script>
-        <script>
-            var roomName = "<%= roomName %>"
-        </script>
-    <%}%>
-    <title>TacTicToe</title>
-</head>
-<body>
-    <%if(local === false) {%>
-        <div class="code">
-            <a>Code: <a><%= roomName %></a></a>
-            <p class="player" id="player"> Waiting for Opponent </p>
-        </div>
-    <%}%>
-  <div class="board" id="board">
-      
-  </div>
-  <div class="winning-message" id="winningMessage">
-    <div data-winning-message-text></div>
-    <%if(local === true) {%>
-        <button onclick="restart()">Restart</button>
-    <%} else {%>
-        <button onclick="rematch()">Restart</button>
-    <% } %>
-  </div>
-</body>
-    <script src="/socket.io/socket.io.js"></script>
-</html>
+<link rel="stylesheet" href="darkendevelopers.gthub.io/kirbo/ultimatex2.css">
+<script src="darkendevelopers.gthub.io/kirbo/ultimatex2.js" defer></script>
+<div class="board" id="board"></div>
+<div class="winning-message" id="winningMessage">
+<div data-winning-message-text></div>
+<button onclick="restart()">Restart</button>
+</div>

@@ -1,4 +1,3 @@
-var socket = new io()
 const X_CLASS = 'x';
 const CIRCLE_CLASS = 'o';
 const WINNING_COMBINATIONS = [
@@ -11,146 +10,14 @@ const WINNING_COMBINATIONS = [
   [0, 4, 8],
   [2, 4, 6],
 ];
-var player;
-var turn;
 var circleTurn = false
 const winningMessageElement = document.getElementById('winningMessage');
 const winningMessageTextElement = document.querySelector('[data-winning-message-text]');
-window.onload = function() {
-    socket.emit('join', roomName);
-    restart()
-    document.querySelectorAll('[data]').forEach((sec) => {
-        sec.classList.add('wait');
-    });
-}
-socket.on('board', (player) => {
-  if (player === 'x') {
-    circleTurn = false;
-    turn = 'x';
-  } else {
-    circleTurn = true;
-    turn = 'o';
-  }
-});
-socket.on('start', (x) => {
-    setBoardHoverClass();
-  if (turn === 'x') {
-    player.innerText = ` Your Turn `;
-    document.querySelectorAll('[data]').forEach((sec) => {
-        sec.classList.remove('wait')
-    });
-  } else {
-    player.innerText = ` X's Turn `;
-  }
-});
-socket.on('sec', (sec, cla) => {
-    var data = document.querySelectorAll('[data' + sec + ']');
-    if (cla === 't') {
-        document.getElementById(sec).classList.add(cla);
-    } else {
-        data.forEach((c) => {
-            if(c.className.includes('cell')) c.className = 'cell'
-            if(!c.className.includes('section') && !c.className.includes('cell')) {
-                var d = document.querySelectorAll('[data' + c.id.toString() + ']');
-                c.className = 'sec';
-                d.forEach(cell => {
-                    cell.className = 'cell'
-                })
-            }
-        });
-        document.getElementById(sec).classList.add(cla);
-    }
-    checksection(cla);
-    checkcelltie()
-});
-socket.on('secs', (sec, cla) => {
-    var data = document.querySelectorAll('[data' + sec + ']');
-    if (cla === 't') {
-        document.getElementById(sec).classList.add(cla);
-    } else {
-        data.forEach((c) => {
-            c.className = 'sec';
-            var d = document.querySelectorAll('[data' + c.id.toString() + ']');
-            d.forEach(cell => {
-                cell.className = 'cell'
-            })
-        });
-        document.getElementById(sec).classList.add(cla);
-    }
-    if (checkwin(cla)) {
-        document.querySelectorAll('[data]').forEach((cell) => {
-            cell.classList.add('wait');
-        });
-        winningMessageTextElement.innerText = `${cla.toUpperCase()}'s Wins!`;
-        winningMessageElement.classList.add('show');
-    } else if (isDraw() === true) {
-        document.querySelectorAll('[data]').forEach((cell) => {
-            cell.classList.add('wait');
-        });
-        winningMessageTextElement.innerText = 'Draw!';
-        winningMessageElement.classList.add('show');
-    }
-});
-socket.on('moved', (pos, cla, who) => {
-    if (turn === 'o' && who === 'o') {
-        document.querySelectorAll('[data]').forEach((sec) => {
-            if (sec.classList.contains('x') || sec.classList.contains('o') || sec.classList.contains('t')) return;
-            sec.className = 'section';
-        });
-        player.innerText = ` Your Turn `;
-    } else if (turn === 'x' && who === 'x') {
-        document.querySelectorAll('[data]').forEach((sec) => {
-            if (sec.classList.contains('x') || sec.classList.contains('o') || sec.classList.contains('t')) return;
-            sec.className = 'section';
-        });
-        player.innerText = ` Your Turn `;
-    } else {
-        document.querySelectorAll('[data]').forEach((sec) => {
-            if (sec.classList.contains('x') || sec.classList.contains('o') || sec.classList.contains('t')) return;
-            sec.className = 'section wait';
-        });
-        player.innerText = ` ${who.toUpperCase()}'s Turn `;
-    }
-    var sec = pos.charAt(0);
-    sec += pos.charAt(1);
-    if (document.getElementById(sec).className.includes('x') || document.getElementById(sec).className === 'section o') return;
-    document.getElementById(pos).classList.add(cla);
-    checksec(cla);
-    checksectie();
-});
-socket.on('request', (a) => {
-  var b = confirm('Opponet wants to rematch');
-  socket.emit('response', roomName, b);
-  if (b === false) {
-    location.href = '/';
-  }
-});
-socket.on('rematch', (res) => {
-  if (res === false) {
-    alert('Opponent Denied, Sending to home page in 5 seconds');
-    setTimeout(() => {
-      location.href = '/';
-    }, 5000);
-  } else {
-    if (turn === 'x') {
-      circleTurn = true;
-      turn = 'o';
-    } else {
-      circleTurn = false;
-      turn = 'x';
-    }
-    restart()
-    winningMessageElement.classList.remove('show');
-    setBoardHoverClass();
-  }
-});
+window.onload = restart()
 function restart() {
     board();
-    if (roomName != '') {
-        player = document.getElementById('player');
-    } else {
-        location.href = '/';
-    }
+    circleTurn = false;
+    setBoardHoverClass();
 }
 function board() {
     winningMessageTextElement.innerText = '';
@@ -183,15 +50,33 @@ function board() {
     }
 }
 function action(s, ss, sss) {
+    var section = document.querySelectorAll('[data]')
     var id = document.getElementById(s + ss + sss);
     var sec = document.getElementById(s + ss);
     var sections = document.getElementById(s);
+    var currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS;
     if (id.className != 'cell' || sec.className != 'sec' || sections.className != 'section') return;
-    socket.emit('move', roomName, s + ss + sss, turn);
-    document.querySelectorAll('[data]').forEach((cell) => {
-        if (cell.className.includes('x') || cell.classList.contains('o')) return;
-        cell.classList.add('wait');
-    });
+    id.classList.add(currentClass);
+    checksec(currentClass);
+    checksection(currentClass);
+    checksectie();
+    checkcelltie()
+    if (checkwin(currentClass)) {
+        section.forEach((cell) => {
+            cell.classList.add('wait');
+        });
+        winningMessageTextElement.innerText = `${currentClass.toUpperCase()}'s Wins!`;
+        winningMessageElement.classList.add('show');
+    } else if (isDraw() === true) {
+        section.forEach((cell) => {
+            cell.classList.add('wait');
+        });
+        winningMessageTextElement.innerText = 'Draw!';
+        winningMessageElement.classList.add('show');
+    } else {
+        circleTurn = !circleTurn;
+        setBoardHoverClass();
+    }
 }
 function setBoardHoverClass() {
     var board = document.getElementById('board')
@@ -215,7 +100,10 @@ function checksec(currentClass) {
                         return d[index].classList.contains(currentClass);
                     });
                     if (a === true) {
-                        socket.emit('section', roomName, cell.id, currentClass);
+                        cell.classList.add(currentClass)
+                        d.forEach(c => {
+                            c.className = 'cell'
+                        })
                     }
                 })
             }
@@ -232,25 +120,34 @@ function checksection(currentClass) {
                 return d[index].classList.contains(currentClass);
             });
             if (a === true) {
-                socket.emit('sections', roomName, sec.id, currentClass);
+                sec.classList.add(currentClass);
+                document.querySelectorAll('[data' + sec.id.toString() + ']').forEach(se => {
+                    se.className = 'sec'
+                    var a = document.querySelectorAll(`[data${se.id.toString()}]`)
+                    a.forEach((s) => {
+                        s.className = 'cell';
+                    })
+                })
             }
         });
       }
     });
 }
 function checksectie() {
-    document.querySelectorAll('[data]').forEach((sec) => {
+    var section = document.querySelectorAll('[data]')
+    section.forEach((sec) => {
         if (sec.className === 'section') {
-            var s = document.querySelectorAll('[data' + sec.id.toString() + ']');
-            var b = [...s].every((cell) => {
+            var data = document.querySelectorAll('[data' + sec.id.toString() + ']');
+            var b = [...data].every((cell) => {
                 return (cell.className.includes(X_CLASS) || cell.className.includes(CIRCLE_CLASS));
             });
-            if (b) socket.emit('section', roomName, sec.id, 't');
+            if (b) sec.classList.add('t')
         }
     })
 }
 function checkcelltie() {
-    document.querySelectorAll('[data]').forEach((sec) => {
+    var section = document.querySelectorAll('[data]')
+    section.forEach((sec) => {
         if (sec.className === 'section') {
             var data = document.querySelectorAll('[data' + sec.id.toString() + ']');
             data.forEach((a) => {
@@ -259,7 +156,7 @@ function checkcelltie() {
                     var b = [...s].every((cell) => {
                         return (cell.className.includes(X_CLASS) || cell.className.includes(CIRCLE_CLASS));
                     });
-                    if (b) socket.emit('section', roomName, a.id, 't');
+                    if (b) a.classList.add('t')
                 }
             });
         }
@@ -274,10 +171,8 @@ function isDraw() {
 function checkwin(currentClass) {
     return WINNING_COMBINATIONS.some((combination) => {
         return combination.every((index) => {
-            return document.querySelectorAll('[data]')[index].classList.contains(currentClass);
+            var a = document.querySelectorAll('[data]')
+            return a[index].classList.contains(currentClass);
       });
     });
-}
-function rematch() {
-  socket.emit('rematch', roomName);
 }

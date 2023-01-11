@@ -1,4 +1,3 @@
-var socket = new io()
 const X_CLASS = 'x';
 const CIRCLE_CLASS = 'o';
 const WINNING_COMBINATIONS = [
@@ -11,17 +10,14 @@ const WINNING_COMBINATIONS = [
   [0, 4, 8],
   [2, 4, 6],
 ];
-var circleTurn = false;
-var turn;
+var circleTurn = false
 const winningMessageElement = document.getElementById('winningMessage');
 const winningMessageTextElement = document.querySelector('[data-winning-message-text]');
 window.onload = restart()
 function restart() {
-    board()
-    socket.emit('join', roomName);
-    document.querySelectorAll('[data]').forEach((sec) => {
-        sec.classList.add('wait');
-    });
+    board();
+    circleTurn = false;
+    setBoardHoverClass();
 }
 function board() {
     winningMessageTextElement.innerText = '';
@@ -37,53 +33,17 @@ function board() {
         document.getElementById('board').appendChild(cell)
     }
 }
-socket.on('board', (player) => {
-    if (player === 'x') {
-      circleTurn = false;
-      turn = 'x';
-    } else {
-      circleTurn = true;
-      turn = 'o';
-    }
-  });
-socket.on('start', (x) => {
-    setBoardHoverClass();
-    if (turn === 'x') {
-      player.innerText = ` Your Turn `;
-      document.querySelectorAll('[data]').forEach((sec) => {
-          sec.classList.remove('wait')
-      });
-    } else {
-      player.innerText = ` X's Turn `;
-    }
-});
-socket.on('moved', (pos, cla, who) => {
-    if (turn === 'o' && who === 'o') {
-        document.querySelectorAll('[data]').forEach((sec) => {
-            if (sec.classList.contains('x') || sec.classList.contains('o') || sec.classList.contains('t')) return;
-            sec.className = 'cell';
-        });
-        player.innerText = ` Your Turn `;
-    } else if (turn === 'x' && who === 'x') {
-        document.querySelectorAll('[data]').forEach((sec) => {
-            if (sec.classList.contains('x') || sec.classList.contains('o') || sec.classList.contains('t')) return;
-            sec.className = 'cell';
-        });
-        player.innerText = ` Your Turn `;
-    } else {
-        document.querySelectorAll('[data]').forEach((sec) => {
-            if (sec.classList.contains('x') || sec.classList.contains('o') || sec.classList.contains('t')) return;
-            sec.className = 'cell wait';
-        });
-        player.innerText = ` ${who.toUpperCase()}'s Turn `;
-    }
-    document.getElementById(pos).classList.add(cla);
+function action(s) {
     var section = document.querySelectorAll('[data]')
-    if (checkwin(cla)) {
+    var cell = document.getElementById(s);
+    var currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS;
+    if (cell.className != 'cell') return;
+    cell.classList.add(currentClass);
+    if (checkwin(currentClass)) {
         section.forEach((cell) => {
             cell.classList.add('wait');
         });
-        winningMessageTextElement.innerText = `${cla.toUpperCase()}'s Wins!`;
+        winningMessageTextElement.innerText = `${currentClass.toUpperCase()}'s Wins!`;
         winningMessageElement.classList.add('show');
     } else if (isDraw() === true) {
         section.forEach((cell) => {
@@ -91,46 +51,10 @@ socket.on('moved', (pos, cla, who) => {
         });
         winningMessageTextElement.innerText = 'Draw!';
         winningMessageElement.classList.add('show');
-    }
-});
-socket.on('request', (a) => {
-    var b = confirm('Opponet wants to rematch');
-    socket.emit('response', roomName, b);
-    if (b === false) {
-      location.href = '/';
-    }
-  });
-socket.on('rematch', (res) => {
-    if (res === false) {
-        alert('Opponent Denied, Sending to home page in 5 seconds');
-        setTimeout(() => {
-            location.href = '/';
-        }, 5000);
     } else {
-        if (turn === 'x') {
-            circleTurn = true;
-            turn = 'o';
-        } else {
-            circleTurn = false;
-            turn = 'x';
-        }
-        restart()
-        winningMessageElement.classList.remove('show');
+        circleTurn = !circleTurn;
         setBoardHoverClass();
     }
-});
-function rematch() {
-    socket.emit('rematch', roomName);
-}
-function action(s) {
-    var cell = document.getElementById(s);
-    if (cell.className != 'cell') return;
-    if (circleTurn === true) {
-      var b = 'o';
-    } else {
-      var b = 'x';
-    }
-    socket.emit('move', roomName, s, b);
 }
 function isDraw() {
     var a = document.querySelectorAll('[data]')

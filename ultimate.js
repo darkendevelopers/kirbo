@@ -29,7 +29,6 @@ function board() {
         section.id = s
         section.className = 'first'
         section.setAttribute('data', '')
-        document.getElementById('board').appendChild(section)
         for(o = 1; o < 10; o++) {
             if(o===1){var se='tl'}else if(o===2){var se='tm'}else if(o===3){var se='tr'}else if(o===4){var se='ml'}else if(o===5){var se='mm'}else if(o===6){var se='mr'}else if(o===7){var se='bl'}else if(o===8){var se='bm'}else{var se='br'}
             var sect = document.createElement('div')
@@ -40,6 +39,7 @@ function board() {
             section.appendChild(sect)
         }
     }
+    document.getElementById('board').appendChild(section)
 }
 function action(s, ss) {
     var section = document.querySelectorAll('[data]')

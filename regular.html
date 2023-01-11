@@ -5,3 +5,111 @@
 <div data-winning-message-text></div>
 <button onclick="restart()">Restart</button>
 </div>
+javascript:document.body.innerHTML = `<link rel="stylesheet" href="darkendevelopers.github.io/kirbo/ultimate.css">
+<script src="darkendevelopers.github.io/kirbo/ultimate.js" defer></script>
+<div class="board" id="board">
+<div class="first" id="tl" cell>
+<div class="cell" onclick="action('tl','tl')" id="tltl" data-celltl></div>
+<div class="cell" onclick="action('tl','tm')" id="tltm" data-celltl></div>
+<div class="cell" onclick="action('tl','tr')" id="tltr" data-celltl></div>
+<div class="cell" onclick="action('tl','ml')" id="tlml" data-celltl></div>
+<div class="cell" onclick="action('tl','mm')" id="tlmm" data-celltl></div>
+<div class="cell" onclick="action('tl','mr')" id="tlmr" data-celltl></div>
+<div class="cell" onclick="action('tl','bl')" id="tlbl" data-celltl></div>
+<div class="cell" onclick="action('tl','bm')" id="tlbm" data-celltl></div>
+<div class="cell" onclick="action('tl','br')" id="tlbr" data-celltl></div>
+</div>
+<div class="first" id="tm" cell>
+<div class="cell" onclick="action('tm','tl')" id="tmtl" data-celltm></div>
+<div class="cell" onclick="action('tm','tm')" id="tmtm" data-celltm></div>
+<div class="cell" onclick="action('tm','tr')" id="tmtr" data-celltm></div>
+<div class="cell" onclick="action('tm','ml')" id="tmml" data-celltm></div>
+<div class="cell" onclick="action('tm','mm')" id="tmmm" data-celltm></div>
+<div class="cell" onclick="action('tm','mr')" id="tmmr" data-celltm></div>
+<div class="cell" onclick="action('tm','bl')" id="tmbl" data-celltm></div>
+<div class="cell" onclick="action('tm','bm')" id="tmbm" data-celltm></div>
+<div class="cell" onclick="action('tm','br')" id="tmbr" data-celltm></div>
+</div>
+<div class="first" id="tr" cell>
+<div class="cell" onclick="action('tr','tl')" id="trtl" data-celltr></div>
+<div class="cell" onclick="action('tr','tm')" id="trtm" data-celltr></div>
+<div class="cell" onclick="action('tr','tr')" id="trtr" data-celltr></div>
+<div class="cell" onclick="action('tr','ml')" id="trml" data-celltr></div>
+<div class="cell" onclick="action('tr','mm')" id="trmm" data-celltr></div>
+<div class="cell" onclick="action('tr','mr')" id="trmr" data-celltr></div>
+<div class="cell" onclick="action('tr','bl')" id="trbl" data-celltr></div>
+<div class="cell" onclick="action('tr','bm')" id="trbm" data-celltr></div>
+<div class="cell" onclick="action('tr','br')" id="trbr" data-celltr></div>
+</div>
+<div class="first" id="ml" cell>
+<div class="cell" onclick="action('ml','tl')" id="mltl" data-cellml></div>
+<div class="cell" onclick="action('ml','tm')" id="mltm" data-cellml></div>
+<div class="cell" onclick="action('ml','tr')" id="mltr" data-cellml></div>
+<div class="cell" onclick="action('ml','ml')" id="mlml" data-cellml></div>
+<div class="cell" onclick="action('ml','mm')" id="mlmm" data-cellml></div>
+<div class="cell" onclick="action('ml','mr')" id="mlmr" data-cellml></div>
+<div class="cell" onclick="action('ml','bl')" id="mlbl" data-cellml></div>
+<div class="cell" onclick="action('ml','bm')" id="mlbm" data-cellml></div>
+<div class="cell" onclick="action('ml','br')" id="mlbr" data-cellml></div>
+</div>
+<div class="first" id="mm" cell>
+<div class="cell" onclick="action('mm','tl')" id="mmtl" data-cellmm></div>
+<div class="cell" onclick="action('mm','tm')" id="mmtm" data-cellmm></div>
+<div class="cell" onclick="action('mm','tr')" id="mmtr" data-cellmm></div>
+<div class="cell" onclick="action('mm','ml')" id="mmml" data-cellmm></div>
+<div class="cell" onclick="action('mm','mm')" id="mmmm" data-cellmm></div>
+<div class="cell" onclick="action('mm','mr')" id="mmmr" data-cellmm></div>
+<div class="cell" onclick="action('mm','bl')" id="mmbl" data-cellmm></div>
+<div class="cell" onclick="action('mm','bm')" id="mmbm" data-cellmm></div>
+<div class="cell" onclick="action('mm','br')" id="mmbr" data-cellmm></div>
+</div>
+<div class="first" id="mr" cell>
+<div class="cell" onclick="action('mr','tl')" id="mrtl" data-cellmr></div>
+<div class="cell" onclick="action('mr','tm')" id="mrtm" data-cellmr></div>
+<div class="cell" onclick="action('mr','tr')" id="mrtr" data-cellmr></div>
+<div class="cell" onclick="action('mr','ml')" id="mrml" data-cellmr></div>
+<div class="cell" onclick="action('mr','mm')" id="mrmm" data-cellmr></div>
+<div class="cell" onclick="action('mr','mr')" id="mrmr" data-cellmr></div>
+<div class="cell" onclick="action('mr','bl')" id="mrbl" data-cellmr></div>
+<div class="cell" onclick="action('mr','bm')" id="mrbm" data-cellmr></div>
+<div class="cell" onclick="action('mr','br')" id="mrbr" data-cellmr></div>
+</div>
+<div class="first" id="bl" cell>
+<div class="cell" onclick="action('bl','tl')" id="bltl" data-cellbl></div>
+<div class="cell" onclick="action('bl','tm')" id="bltm" data-cellbl></div>
+<div class="cell" onclick="action('bl','tr')" id="bltr" data-cellbl></div>
+<div class="cell" onclick="action('bl','ml')" id="blml" data-cellbl></div>
+<div class="cell" onclick="action('bl','mm')" id="blmm" data-cellbl></div>
+<div class="cell" onclick="action('bl','mr')" id="blmr" data-cellbl></div>
+<div class="cell" onclick="action('bl','bl')" id="blbl" data-cellbl></div>
+<div class="cell" onclick="action('bl','bm')" id="blbm" data-cellbl></div>
+<div class="cell" onclick="action('bl','br')" id="blbr" data-cellbl></div>
+</div>
+<div class="first" id="bm" cell>
+<div class="cell" onclick="action('bm','tl')" id="bmtl" data-cellbm></div>
+<div class="cell" onclick="action('bm','tm')" id="bmtm" data-cellbm></div>
+<div class="cell" onclick="action('bm','tr')" id="bmtr" data-cellbm></div>
+<div class="cell" onclick="action('bm','ml')" id="bmml" data-cellbm></div>
+<div class="cell" onclick="action('bm','mm')" id="bmmm" data-cellbm></div>
+<div class="cell" onclick="action('bm','mr')" id="bmmr" data-cellbm></div>
+<div class="cell" onclick="action('bm','bl')" id="bmbl" data-cellbm></div>
+<div class="cell" onclick="action('bm','bm')" id="bmbm" data-cellbm></div>
+<div class="cell" onclick="action('bm','br')" id="bmbr" data-cellbm></div>
+</div>
+<div class="first" id="br" cell>
+<div class="cell" onclick="action('br','tl')" id="brtl" data-cellbr></div>
+<div class="cell" onclick="action('br','tm')" id="brtm" data-cellbr></div>
+<div class="cell" onclick="action('br','tr')" id="brtr" data-cellbr></div>
+<div class="cell" onclick="action('br','ml')" id="brml" data-cellbr></div>
+<div class="cell" onclick="action('br','mm')" id="brmm" data-cellbr></div>
+<div class="cell" onclick="action('br','mr')" id="brmr" data-cellbr></div>
+<div class="cell" onclick="action('br','bl')" id="brbl" data-cellbr></div>
+<div class="cell" onclick="action('br','bm')" id="brbm" data-cellbr></div>
+<div class="cell" onclick="action('br','br')" id="brbr" data-cellbr></div>
+</div>
+</div>
+<div class="winning-message" id="winningMessage">
+<div data-winning-message-text></div>
+<button onclick="restart()">Restart</button>
+</div>
+`

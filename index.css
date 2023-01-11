@@ -1,0 +1,157 @@
+@font-face {
+    font-family: 'roboto-light'; /*a name to be used later*/
+    src: url('fonts/Roboto-Light.ttf'); /*URL to font*/
+}
+@keyframes fadeout {
+    0% {opacity:1;display:flex;}
+    100% {opacity:0;display:none;}
+}
+@keyframes fadein {
+    0% {opacity:0;display:none;}
+    100% {opacity:1;display:flex;}
+}
+.menu {
+    display: none;
+}
+.show {
+    animation: fadein 1s;
+    animation-fill-mode: forwards;
+}
+.index {
+    display:flex;
+}
+.hide {
+    animation: fadeout 1s;
+    animation-fill-mode: forwards;
+}
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+.check {
+  position: relative;
+  margin: 0 auto;
+  text-align: center;
+}
+.input {
+  position: fixed;
+  width: 50%;
+  font-size: 22px;
+  margin: 0 auto;
+  text-align: center;
+  border-radius: 5px;
+  background-color: #546e7a;
+  border: none;
+}
+.gamebtn {
+  border-radius: 4px;
+  background-color: #546e7a;
+  border: none;
+  color: #ffffff;
+  font-size: 30px;
+  padding: auto;
+  height: 50px;
+  width: 60px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+.gamebtn span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+.gamebtn span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+.gamebtn:hover span {
+  padding-right: 25px;
+}
+.gamebtn:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+#particles-js {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #607d8b;
+}
+body {
+  font-family: roboto-light;
+  overflow: hidden;
+  margin: 0;
+}
+.text {
+  position: fixed;
+  top: 50%;
+  right: 50%;
+  font-size: 20px;
+  transform: translate(50%, -50%);
+  color: #cfd8dc;
+  max-width: 90%;
+  padding: 2em 3em;
+  background: rgba(0, 0, 0, 0.4);
+  text-shadow: 0px 0px 2px #131415;
+}
+.alert {
+  padding: 17px;
+  width: 100%;
+  background-color: #f44336; /* Red */
+  color: white;
+  margin-bottom: 15px;
+}
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.closebtn:hover {
+  color: #cfd8dc;
+}
+.button {
+  border-radius: 4px;
+  background-color: #546e7a;
+  border: none;
+  color: #ffffff;
+  text-align: center;
+  font-size: 28px;
+  padding: 20px;
+  width: 200px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+.button:hover span {
+  padding-right: 25px;
+}
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}

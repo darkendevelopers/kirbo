@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TacTicToe</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" media="screen" href="https://cdn.jsdelivr.net/gh/adamculpepper/toggle-switchy@latest/toggle-switchy.css">
+
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div id="index" class="index">
+        <div class="text">
+            <% if(error === 'full'){ %>
+            <div class="alert" id="alert" onclick="document.getElementById('alert').style.display='none'">
+                <span class="closebtn">&times;</span>
+                <a>That Room is full</a>
+            </div>
+            <% } %>  
+            <% if(error === 'game'){ %>
+                <div class="alert" id="alert" onclick="document.getElementById('alert').style.display='none'">
+                    <span class="closebtn">&times;</span>
+                    <a>Please specify a game</a>
+                </div>
+            <% } %>     
+            <% if(error === 'missing'){ %>
+                <div class="alert" id="alert" onclick="document.getElementById('alert').style.display='none'">
+                    <span class="closebtn">&times;</span>
+                    <a>No Room with that code</a>
+                </div>
+            <% } %>
+            <button class="button" onclick="create()">Create Game</button>
+            <br>
+            <button class="button" onclick="join()">Join Game</button>
+            <br>
+            <a>Created by Darken248</a>
+        </div>
+    </div>
+    <div id="menu" class="menu">
+        <div class="text">
+            <button onclick="left()" id="left" class="gamebtn" style="position: relative;right: 24%;">
+                ⬅
+            </button>
+            <div class="input" style="position: absolute;left: 25%;top: 11.3%;">
+                <div id="gamemode">Regular<br><a style="color: transparent;font-size: 17px;">ㅤ</a></div>
+            </div>
+            <button onclick="right()" id="right" class="gamebtn" style="position: relative;left: 55%;">
+                ➡
+            </button>
+            <form class="check" action="/game" method="POST">
+                    <input id="regu" name="regu" type="checkbox" style="display: none;"></input>
+                    <input id="ulti" name="ulti" type="checkbox" style="display: none;"></input>
+                    <input id="ultix" name="ultix" type="checkbox" style="display: none;"></input>
+                    <br><br>
+                <div class="check">
+                    <input id="local" name="local" type="checkbox" style="display: none;"></input>
+                    <label for="checkbox" class="toggle-switchy" data-style="rounded" style="color: black;">
+                        <input autocomplete='off' onclick="locals()" type="checkbox" id="checkbox">
+                        <span class="toggle">
+                            <span class="switch"></span>
+                        </span>
+                    </label>
+                    <br>
+                    <a>Local Game</a>
+                </div>
+                <button class="button" type="submit">Create Game</button>
+            </form>
+            <a>Created by Darken248</a>
+        </div>
+    </div>  
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script src='https://cldup.com/S6Ptkwu_qA.js'></script>
+<script src="index.js"></script>
+</html>

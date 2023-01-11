@@ -41,7 +41,7 @@ function board() {
         }
     }
 }
-function action(s, ss, sss) {
+function action(s, ss) {
     var section = document.querySelectorAll('[data]')
     var sec = document.getElementById(s + ss);
     var sections = document.getElementById(s);

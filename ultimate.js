@@ -37,7 +37,6 @@ function board() {
             sect.setAttribute('data' + s, '')
             sect.setAttribute("onClick", `action('${s}', '${se}');`);
             section.appendChild(sect)
-            console.log(sect, section)
         }
          document.getElementById('board').appendChild(section)
     }
@@ -47,7 +46,7 @@ function action(s, ss) {
     var sec = document.getElementById(s + ss);
     var sections = document.getElementById(s);
     var currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS;
-    if (sec.className != 'cell' || section.className != 'first') return;
+    if (sec.className != 'cell' || section.className != 'first') return console.log(1)
     sec.classList.add(currentClass);
     checksection(currentClass);
     checkcelltie()

@@ -46,9 +46,9 @@ function action(s, ss) {
     var sec = document.getElementById(s + ss);
     var sections = document.getElementById(s);
     var currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS;
-    if (sec.className != 'cell' || section.className != 'first') return console.log(1)
+    if (sec.className != 'cell' || sections.className != 'first') return console.log(1)
     sec.classList.add(currentClass);
-    checksection(currentClass);
+    checksec(currentClass);
     checkcelltie()
     if (checkwin(currentClass)) {
         section.forEach((cell) => {
@@ -80,24 +80,19 @@ function setBoardHoverClass() {
 function checksec(currentClass) {
     document.querySelectorAll('[data]').forEach((sec) => {
         if (sec.className === 'first') {
-            var data = document.querySelectorAll('[data' + sec.id.toString() + ']');
-            data.forEach((cell) => {
-            if (cell.className === 'cell') {
-                WINNING_COMBINATIONS.some((combination) => {
-                    var d = document.querySelectorAll('[data' + cell.id.toString() + ']');
-                    var a = combination.every((index) => {
-                        return d[index].classList.contains(currentClass);
-                    });
-                    if (a === true) {
-                        cell.classList.add(currentClass)
-                        d.forEach(c => {
-                            c.className = 'cell'
-                        })
-                    }
-                })
-            }
-        });
-      }
+            WINNING_COMBINATIONS.some((combination) => {
+                var d = document.querySelectorAll('[data' + sec.id.toString() + ']');
+                var a = combination.every((index) => {
+                    return d[index].classList.contains(currentClass);
+                });
+                if (a === true) {
+                    sec.classList.add(currentClass)
+                    d.forEach(c => {
+                        c.className = 'cell'
+                    })
+                }
+            })
+        }
     });
 }
 function checkcelltie() {
@@ -105,15 +100,10 @@ function checkcelltie() {
     section.forEach((sec) => {
         if (sec.className === 'first') {
             var data = document.querySelectorAll('[data' + sec.id.toString() + ']');
-            data.forEach((a) => {
-                if (a.className === 'cell') {
-                    var s = document.querySelectorAll('[data' + a.id.toString() + ']');
-                    var b = [...s].every((cell) => {
-                        return (cell.className.includes(X_CLASS) || cell.className.includes(CIRCLE_CLASS));
-                    });
-                    if (b) a.classList.add('t')
-                }
+            var b = [...data].every((cell) => {
+                return (cell.className.includes(X_CLASS) || cell.className.includes(CIRCLE_CLASS));
             });
+            if (b) sec.classList.add('t')
         }
     })
 }

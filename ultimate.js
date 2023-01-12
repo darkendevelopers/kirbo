@@ -37,6 +37,7 @@ function board() {
             sect.setAttribute('data' + s, '')
             sect.setAttribute("onClick", `action('${s}', '${se}');`);
             section.appendChild(sect)
+            console.log(sect, section)
         }
          document.getElementById('board').appendChild(section)
     }

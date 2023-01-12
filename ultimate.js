@@ -19,17 +19,16 @@ function restart() {
     circleTurn = false;
     setBoardHoverClass();
 }
-function board() {
+async function board() {
     winningMessageTextElement.innerText = '';
     winningMessageElement.classList.remove('show');
     document.getElementById('board').innerHTML = ''
-    for(i = 1; i < 10; i++) {
+    await for(i = 1; i < 10; i++) {
         if(i===1){var s='tl'}else if(i===2){var s='tm'}else if(i===3){var s='tr'}else if(i===4){var s='ml'}else if(i===5){var s='mm'}else if(i===6){var s='mr'}else if(i===7){var s='bl'}else if(i===8){var s='bm'}else{var s='br'}
         var section = document.createElement('div')
         section.id = s
         section.className = 'first'
         section.setAttribute('data', '')
-        document.getElementById('board').appendChild(section)
         for(o = 1; o < 10; o++) {
             if(o===1){var se='tl'}else if(o===2){var se='tm'}else if(o===3){var se='tr'}else if(o===4){var se='ml'}else if(o===5){var se='mm'}else if(o===6){var se='mr'}else if(o===7){var se='bl'}else if(o===8){var se='bm'}else{var se='br'}
             var sect = document.createElement('div')
@@ -40,6 +39,7 @@ function board() {
             section.appendChild(sect)
         }
     }
+  document.getElementById('board').appendChild(section)
 }
 function action(s, ss) {
     var section = document.querySelectorAll('[data]')

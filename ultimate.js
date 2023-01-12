@@ -42,20 +42,6 @@ function board() {
          document.getElementById('board').appendChild(section)
     }
 }
-function board() {
-    winningMessageTextElement.innerText = '';
-    winningMessageElement.classList.remove('show');
-    document.getElementById('board').innerHTML = ''
-    for(i = 1; i < 10; i++) {
-        if(i===1){var s='tl'}else if(i===2){var s='tm'}else if(i===3){var s='tr'}else if(i===4){var s='ml'}else if(i===5){var s='mm'}else if(i===6){var s='mr'}else if(i===7){var s='bl'}else if(i===8){var s='bm'}else{var s='br'}
-        var cell = document.createElement('div')
-        cell.id = s
-        cell.className = 'cell'
-        cell.setAttribute("onClick", `action('${s}');`);
-        cell.setAttribute('data', '')
-        document.getElementById('board').appendChild(cell)
-    }
-}
 function action(s, ss) {
     var section = document.querySelectorAll('[data]')
     var sec = document.getElementById(s + ss);

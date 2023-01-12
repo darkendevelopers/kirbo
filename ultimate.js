@@ -41,7 +41,7 @@ function board() {
         }
          document.getElementById('board').appendChild(section)
     }
-}
+} 
 function action(s, ss) {
     var section = document.querySelectorAll('[data]')
     var sec = document.getElementById(s + ss);
